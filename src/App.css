@@ -1,0 +1,61 @@
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -18px;
+  margin-bottom: -18px;
+}
+
+.post {
+  display: flex;
+  flex-direction: column;
+  background-color: #dceded;
+  border-radius: 5px;
+  width: calc(20% - 18px);
+  margin-right: 18px;
+  margin-bottom: 18px;
+}
+
+.post__index {
+  padding: 10px;
+}
+
+.post__title {
+  font-size: 12px;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.post__body {
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+@media screen and (max-width: 1340px) {
+  .post {
+    width: calc(25% - 18px);
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .post {
+    width: calc(33.33% - 18px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .post {
+    width: calc(50% - 18px);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .post {
+    width: calc(100% - 18px);
+  }
+}
+
