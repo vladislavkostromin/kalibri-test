@@ -1,62 +1,45 @@
-import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Posts from './components/Posts';
+import Pagination from './components/Pagination';
 import axios from 'axios';
+import './App.css';
 
-function App(){
+const App = () => {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fetching, setFetching] = useState(true);
-  const [totalCount, setTotalCount] = useState(0);
-  const limit = 20;
-  const URL = 'https://jsonplaceholder.typicode.com/posts'
+  const [postsPerPage] = useState(20);
 
   useEffect(() => {
-    if (fetching) {
-      console.log('fetch')
-      axios.get(`${URL}?_limit=${limit}&_page=${currentPage}`)
-      .then(response => {
-        setPosts([...posts, ...response.data]) 
-        setCurrentPage(prevState => prevState +1)
-        setTotalCount(response.headers['x-total-count'])
-
-        console.log(`страница ${currentPage}`)
-        console.log(setCurrentPage)
-      })
-      .finally(() => setFetching(false));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetching])
-
-  useEffect(() => {
-    document.addEventListener('scroll', scrollHandler)
-    return function () {
-      document.removeEventListener('scroll', scrollHandler)
+    const fetchPosts = async () => {
+      setLoading(true);
+      const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
+      setPosts(res.data);
+      setLoading(false);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
-    const scrollHandler = (e) => {
-      if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 
-        && posts.length < totalCount) {
-        setFetching(true)
-      }
-    }
+    fetchPosts();
+  }, []);
 
-    return (
-      <div className="App">
-        <div className="posts">
-          {posts && posts.map((post, index) => {
-            return (
-              <div className="post" key={index}>
-                <span className="post__index">post {index + 1}</span>
-                <h2 className="post__title">{post.title}</h2>
-                <p className="post__body">{post.body}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-}
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  return (
+    <div className='App'>
+      <h1>Posts</h1>
+      <Posts posts={currentPosts} loading={loading} />
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={posts.length}
+        paginate={paginate}
+      />
+    </div>
+  );
+};
 
 export default App;
