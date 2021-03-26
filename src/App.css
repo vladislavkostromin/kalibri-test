@@ -8,6 +8,7 @@
   flex-wrap: wrap;
   margin-right: -18px;
   margin-bottom: -18px;
+  margin-top: 30px;
 }
 
 .post {
@@ -58,7 +59,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 70px;
+  padding: 0;
 }
 
 .active{
